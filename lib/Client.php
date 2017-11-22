@@ -72,13 +72,10 @@ class Client
 
 	if ($isAuth) {
 	    $arr = $this->_getAuthHeader($method, $params);
-	    print_r($arr);
             $options[CURLOPT_HTTPHEADER] = $arr;
         }
 
         curl_setopt_array($ch, $options);
-	echo "ch " . $ch . " \n $options \n";
-	print_r($options);
         $response = curl_exec($ch);
         $error = curl_error($ch);
 
@@ -122,9 +119,7 @@ class Client
     {
         ksort($params);
 	$paramsString = http_build_query($params);
-	echo "params string: " . $paramsString ." md5 " . md5($paramsString) . " \n hmac "  .hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->_secret). "\n";
         $signature = base64_encode(hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->_secret));
-	echo "signature: " . $signature . "\n";
         return array('Authorization: ' . $this->_key . ':' . $signature);
     }
 
